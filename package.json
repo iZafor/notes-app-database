@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
-    "@types/express": "^4.17.14"
+    "@types/express": "^4.17.14",
+    "@types/uniqid": "^5.3.2"
   }
 }

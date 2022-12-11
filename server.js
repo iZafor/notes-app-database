@@ -4,13 +4,14 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
-const uri = process.env.DB_URI;
+const uri = process.env.DB_URI || "mongodb://127.0.0.1:27017/noteDb";
 mongoose.connect(uri, (err) => {
     if (err) return console.log(err);
     console.log("Connected to the db succecssfuly");
 })
 
 const noteSchema = mongoose.Schema({
+    __id: String,
     title: String,
     content: String
 })
@@ -33,9 +34,9 @@ app.route("/")
             res.json(foundNotes);
         })
     }).post((req, res) => {
-
         const data = req.body;
         const newNote = new Note({
+            __id: data.__id,
             title: data.title,
             content: data.content
         });
@@ -45,5 +46,32 @@ app.route("/")
             message: err.message
         }));
     })
+
+app.delete("/delete/all", (req, res) => {
+    Note.deleteMany({}, (err, response) => {
+        if (err) {
+            return res.json({
+                message: err
+            })
+        }
+        res.json({
+            message: response
+        })
+    })
+})
+
+app.delete("/delete/:__id", (req, res) => {
+    Note.deleteOne({ __id: req.params.__id }, (err, response) => {
+        if (err) {
+            return res.json({
+                message: err
+            })
+        }
+        res.json({
+            message: response
+        })
+    })
+})
+
 
 app.listen(PORT, () => console.log(`app is connected to port ${PORT}`));
