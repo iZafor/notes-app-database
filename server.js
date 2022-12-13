@@ -4,7 +4,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
-const uri = "mongodb://127.0.0.1:27017/noteDb";
+// const uri = "mongodb://127.0.0.1:27017/noteDb";
+const uri = process.env.DB_URI;
 mongoose.connect(uri, (err) => {
     if (err) return console.log(err);
     console.log("Connected to the db succecssfuly");
